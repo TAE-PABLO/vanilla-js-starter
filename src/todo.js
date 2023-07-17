@@ -1,4 +1,4 @@
-import { ObtenerTareas, postTarea, marcarTarea, borrarTarea1} from "./mudular.js";
+import { ObtenerTareas, postTarea, marcarTarea, borrarTarea1, buscarTareas } from "./mudular.js";
 
 // Crear tareas iniciales // GET
 var listaTareasGlobal = [];
@@ -10,7 +10,7 @@ async function crearTareasIniciales() {
   for (let indiceTarea = 0; indiceTarea < listaTareasGlobal.length; indiceTarea++) {
     const tarea = listaTareasGlobal[indiceTarea];
     const textoTarea = tarea.task;
-    agregarTarea(textoTarea , tarea.id, tarea.check);
+    agregarTarea(textoTarea, tarea.id, tarea.check);
     // postTarea(textoTarea);
   }
 }
@@ -72,13 +72,13 @@ async function agregarTareaEvento() {
     const idTarea = ultimaTarea.id
     const checkTarea = ultimaTarea.check
 
-    console.log("SOY UN IDDDDDDDD",idTarea)
+    console.log("SOY UN IDDDDDDDD", idTarea)
 
     agregarTarea(textoTarea, idTarea, checkTarea);
 
 
 
-  }else {
+  } else {
     alert("No hay texto. Agrega una tarea para continuar.");
     return;
   }
@@ -89,34 +89,38 @@ async function agregarTareaEvento() {
 
 // Agregar tarea a la lista
 function agregarTarea(textoTarea, idTarea, checkTarea) {
-  if(checkTarea == true){
+  if (checkTarea == true) {
     contadorTareasRealizadas++;
     document.getElementById("contador").textContent = contadorTareasRealizadas;
   }
 
-  console.log("ENTRE A AGREGAR TAREA SOY EL ID",idTarea);
+  console.log("ENTRE A AGREGAR TAREA SOY EL ID", idTarea);
 
   // ObtenerTareas(textoTarea);
   if (textoTarea !== "") {
 
     const listItem = document.createElement("li");
     const checkbox = document.createElement("input");
+    const img = document.createElement("input");
+    //img.setAttribute("type", "file")
+
+
     checkbox.type = "checkbox";
     checkbox.classList.add("checkbox");
     checkbox.id = idTarea;
     checkbox.checked = checkTarea;
-checkbox.addEventListener("change" , (evento)=>{
-  var miCheck = evento.target;
-  marcarTarea(miCheck.checked, miCheck.id)
-  if(miCheck.checked){
-    contadorTareasRealizadas++;
-    document.getElementById("contador").textContent = contadorTareasRealizadas;
+    checkbox.addEventListener("change", (evento) => {
+      var miCheck = evento.target;
+      marcarTarea(miCheck.checked, miCheck.id)
+      if (miCheck.checked) {
+        contadorTareasRealizadas++;
+        document.getElementById("contador").textContent = contadorTareasRealizadas;
 
-  }else{
-    contadorTareasRealizadas--;
-    document.getElementById("contador").textContent = contadorTareasRealizadas;
-  }
-})
+      } else {
+        contadorTareasRealizadas--;
+        document.getElementById("contador").textContent = contadorTareasRealizadas;
+      }
+    })
     const taskLabel = document.createElement("label");
     taskLabel.textContent = textoTarea;
 
@@ -124,19 +128,20 @@ checkbox.addEventListener("change" , (evento)=>{
     deleteButton.textContent = " || 🗑️";
 
     deleteButton.classList.add("delete")
-    
-  deleteButton.addEventListener("click" , (evento)=>{
-    eliminarTarea(evento,idTarea);
 
-  } )
+    deleteButton.addEventListener("click", (evento) => {
+      eliminarTarea(evento, idTarea);
+
+    })
 
 
-  
+
 
     listItem.appendChild(checkbox);
     listItem.appendChild(taskLabel);
     listItem.appendChild(deleteButton);
     taskList.appendChild(listItem);
+    //taskList.appendChild(img)
 
     taskInput.value = "";
     taskInput.focus();
@@ -145,14 +150,14 @@ checkbox.addEventListener("change" , (evento)=>{
 
     contadorTotalTareas++;
     document.getElementById("contadorTotal").textContent = contadorTotalTareas;
-  } 
+  }
 
   // taskList.addEventListener("click", function (event) {
   //    if (event.target.classList.contains("checkbox")) {
   //     console.log("este es el id del check")
-      
+
   //   }
- // });
+  // });
 
   actualizarMensajeSinTareas();
 }
@@ -197,5 +202,54 @@ function actualizarMensajeSinTareas() {
 document.getElementById("contador").textContent = contadorTareasRealizadas;
 document.getElementById("contadorTotal").textContent = contadorTotalTareas;
 // Crear tareas iniciales al cargar la página
+
+
+
+
+/*
+var botonBuscar = document.getElementById("buscardor12")
+var imputBucar = document.getElementById("buscardor")
+
+botonBuscar.addEventListener("click ", async function (evento) {
+  evento.preventDefault();
+
+  taskList.innerHTML = "";
+  contadorTareasRealizadas = 0;
+  contadorTotalTareas = 0;
+
+  //creadar tareas iniciales
+  listaTareasGlobal = await buscarTareas(imputBucar.value);
+  console.log("Mi lista al iniciar la aplicación: ", listaTareasGlobal);
+
+  for (let indiceTarea = 0; indiceTarea < listaTareasGlobal.length; indiceTarea++) {
+    const tarea = listaTareasGlobal[indiceTarea];
+    const textoTarea = tarea.task;
+    agregarTarea(textoTarea, tarea.id, tarea.check);
+    // postTarea(textoTarea);
+  }
+
+
+});
+*/
+
+/*
+const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg';
+
+const file = document.getElementById('foto');
+const img = document.getElementById('img');
+file.addEventListener('change', e => {
+  if (e.target.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      img.src = e.target.result;
+    }
+    reader.readAsDataURL(e.target.files[0])
+  } else {
+    img.src = defaultFile;
+  }
+});
+
+*/
+
 
 crearTareasIniciales();

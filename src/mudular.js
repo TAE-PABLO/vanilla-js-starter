@@ -93,6 +93,22 @@ export async function borrarTarea1(idTareaAEliminar) {
 }
 
 
+//    buscar get buscar tareas
+
+
+export async function buscarTareas(textoBuscar) {
+    let promesaTareas = fetch(laURLdeToDoList);
+    let resultadoPromesa = await promesaTareas;
+    let datosTarea = await resultadoPromesa.json();
+
+    let tareasFiltradas = datosTarea.filter(  (tarea)=>{
+        return tarea.task.includes(textoBuscar)
+
+
+    })
+    return tareasFiltradas;
+}
+
 
 
 
